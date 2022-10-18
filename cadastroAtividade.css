@@ -1,0 +1,8 @@
+input:disabled, select:disabled{
+  background-color: #dbdbdb!important;
+}
+
+td button{
+  width: 38px;
+  height: 38px;
+}
