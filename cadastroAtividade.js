@@ -33,7 +33,7 @@ async function salvarEdicao(id){
 
   if (1 == 1){
     try {
-      const response = await fetch('/api_modificar',{
+      const response = await fetch('http://localhost:8081/modificar',{
           method: 'post',
           headers: {
               'content-type': 'application/json'
@@ -58,7 +58,7 @@ async function salvarEdicao(id){
 
 async function deleteData(id){
   try {
-    const response = await fetch('/api_deletar',{
+    const response = await fetch('http://localhost:8081/delete',{
         method: 'delete',
         headers: {
             'content-type': 'application/json'
@@ -75,32 +75,21 @@ async function deleteData(id){
 }
 }
 
-async function buscaDados(){
-  let data;
-  
-  //simula busca no BD--------------
-  data = [{
-    id : '001',
-    descricao: 'Fazer a Lisia parar de mexer no cel',
-    tempo: '1',
-    situacao: 'Ativo'
-  },
-  {
-    id : '002',
-    descricao: 'Hakuna',
-    tempo: '3',
-    situacao: 'Ativo'
-  },
-  {
-    id : '003',
-    descricao: 'Hdsdsfakuna',
-    tempo: '1.5',
-    situacao: 'Inativo'
-  },
-  ]
-  //-----------------
-
-  montaTabela(data);
+async function buscaDados(){ 
+  try {
+    const response = await fetch('http://localhost:8081/atividades',{
+        method: 'get',
+        headers: {
+            'content-type': 'application/json'
+        }
+    })
+    if(!response.ok) throw new Error(response.statusText);
+    const data = await response.json();
+    montaTabela(data);
+  } catch (error) {
+  alert('Ops... Ocorreu um erro, por favor tente mais tarde.');
+  console.log(error)
+  }
 }
 
 function montaTabela(data){
@@ -133,7 +122,7 @@ function montaTabela(data){
   });
 }
 
-async function cadastrarDespesas(){
+async function cadastrarAtividade(){
   let id = document.getElementById('id_new').value;
   let tempo = document.getElementById('tempo_new').value;
   let situacao = document.getElementById('situacao_new').value;
@@ -141,7 +130,7 @@ async function cadastrarDespesas(){
 
   if (1==1){ //implementar validações
     try {
-      const response = await fetch('/api_cadastrar',{
+      const response = await fetch('http://localhost:8081/criar',{
           method: 'post',
           headers: {
               'content-type': 'application/json'
@@ -154,6 +143,9 @@ async function cadastrarDespesas(){
           })
       })
       if(!response.ok) throw new Error(response.statusText);
+
+      const data = await response.json()
+      console.log(data)
       await buscaDados();
   } catch (error) {
     alert('Ops... Ocorreu um erro, por favor tente mais tarde.');
